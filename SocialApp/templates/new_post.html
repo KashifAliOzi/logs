@@ -1,0 +1,40 @@
+{%  extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<meta charset="UTF-8">
+<head>
+    <style>
+        .btn{
+        background-color: orange;
+        border: 2px solid black;
+        margin: 30px;
+        }
+
+        .post{
+        backgroud-color: yellow;
+        border: 2px solid black;
+        margin: 10px;
+        }
+    </style>
+</head>
+<title>New Post</title>
+<div class="post">
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    <br>
+    <label>Title</label>
+    <input type="text" name="title">
+    <br><br>
+
+    <input type="file" name="picture">
+    <br><br>
+
+    <label>Description</label>
+    <textarea name="description" rows="4" cols="50"></textarea>
+    <br><br>
+    <input type="submit" value="Post" class="btn">
+</form>
+</div>
+
+{% endblock %}

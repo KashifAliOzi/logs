@@ -1,0 +1,31 @@
+{%  extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<meta charset="UTF-8">
+<title>New Post</title>
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {%for p in post%}
+    <br>
+    <label>Title</label>
+    <input type="text" name="title" value="{{p.title}}">
+    <br><br>
+<!--    <img id="img" src="{{media_url}}/{{p.image}}" style="width:200px; height:200px;">-->
+    <br>
+    <input type="file" name="picture">
+    <br><br>
+
+    <label>Description</label>
+    <textarea name="description" rows="4" cols="50">{{p.description}}</textarea>
+    {%endfor%}
+    <br><br>
+    <input type="submit" value="Update">
+</form>
+
+
+{% endblock %}
+
+<script>
+
+</script>

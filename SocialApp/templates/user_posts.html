@@ -1,0 +1,54 @@
+{%  extends 'main.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <style>
+        button{
+            width: 100px;
+            background-color:orange;
+            color:white;
+            float:right;
+            margin:10px;
+            margin-left: -8px;
+        }
+    </style>
+</head>
+    <title>Posts</title>
+
+    <div id="user-name">
+        <h4>My Posts</h4>
+
+    </div>
+
+<div class="row">
+	<div class="col-md-7">
+		<hr>
+		<div class="card card-body">
+        {%for p in posts %}
+            <table style="border: 2px solid green; padding: 10px; margin: 20px;">
+                <tr>
+                    <td>
+                        <h4>{{p.title}}</h4>
+                        <br>
+                        <p>
+                            {{p.description}}
+                    </td>
+                    <td>
+                        <img src="{{media_url}}/{{p.image}}" style="width:200px; height:200px; float:right;">
+                    </td>
+                    <td>
+                        <button type="submit" onclick="location.href = '{% url 'socialapp:postdetail' p.id %}'">View</button><br>
+                        <button type="submit" onclick="location.href = '{% url 'socialapp:updatepost' p.id %}'">Update</button><br>
+                        <button type="submit" onclick="location.href = '{% url 'socialapp:deletepost' p.id %}'">Delete</button><br>
+
+                    </td>
+
+                </tr>
+            </table>
+
+        {%endfor%}
+    </div>
+    </div>
+</div>
+
+{% endblock %}
