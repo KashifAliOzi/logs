@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -10,7 +10,7 @@ from .models import *
 from django.core.mail import send_mail
 from MiniFb.settings import *
 from django.contrib.sessions.models import Session
-
+import json
 
 def index(request):
     return HttpResponse("Testing")
@@ -31,7 +31,7 @@ def registerPage(request):
                 # recepient = request.POST.get('email')
                 # send_mail(subject,
                 #           message, EMAIL_HOST_USER, [recepient], fail_silently=False)
-                return redirect('socialapp:register')
+                return redirect('socialapp:login')
         context['form'] = form
         return render(request, 'register.html', context)
 
@@ -42,13 +42,21 @@ def userLogin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        rememberMe = request.POST.get('rememberme')
+        rememberMe = False
+        try:
+            rememberMe = request.POST['rememberme']
+            rememberMe = True
+        except:
+            rememberMe = False
+        print('rem me:', rememberMe)
         usr = authenticate(request, username=username, password=password)
         if usr is not None:
             login(request, usr)
             request.session['is_logged'] = True
             if rememberMe==True:
-                request.session.set_expiry=900
+                request.session.set_expiry(900)
+            else:
+                request.session.set_expiry(30)
             return redirect('socialapp:userposts')
         else:
             messages.info(request, 'Username OR password is incorrect')
@@ -122,3 +130,10 @@ def verifyEmail(request):
         return redirect('socialapp:login')
     else:
         return HttpResponse('invalid token')
+
+def emailDuplicationChecker(request):
+    temp = Users.objects.filter(email=request.GET.get('email')).count()
+    if temp > 0:
+        return JsonResponse({"status": False})
+    else:
+        return JsonResponse({"status": True})

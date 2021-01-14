@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 from . import views
@@ -16,6 +17,5 @@ urlpatterns = [
     path('updatepost/<int:id>/', views.updatePost, name='updatepost'),
     path('deletepost/<int:id>/', views.deletePost, name='deletepost'),
     path('verifylogin/', views.verifyEmail),
-
-
+    path('emailduplicationcheck', views.emailDuplicationChecker, name='emailduplicationcheck'),
 ]

@@ -117,9 +117,9 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'SocialApp.Users'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+STATICFILES_DIRS = (
+                os.path.join(BASE_DIR,'static'), # if your static files folder is named "staticfiles"
+)
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
