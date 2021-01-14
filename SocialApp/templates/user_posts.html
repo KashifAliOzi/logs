@@ -38,13 +38,16 @@
                             {{p.description}}
                     </td>
                     <td>
+                        <div style=" float: right;">
                         <img src="{{media_url}}/{{p.image}}" style="width:200px; height:200px; float:right;">
+                    </div>
                     </td>
                     <td>
+                        <div style="float:right;">
                         <button type="submit" onclick="location.href = '{% url 'socialapp:postdetail' p.id %}'">View</button><br>
                         <button type="submit" onclick="location.href = '{% url 'socialapp:updatepost' p.id %}'">Update</button><br>
                         <button type="submit" onclick="location.href = '{% url 'socialapp:deletepost' p.id %}'">Delete</button><br>
-
+                        </div>
                     </td>
 
                 </tr>
