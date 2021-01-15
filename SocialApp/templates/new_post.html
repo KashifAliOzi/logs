@@ -3,42 +3,66 @@
 {% block content %}
 
 <meta charset="UTF-8">
+
 <head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <style>
-        .btn{
-        background-color: orange;
-        border: 2px solid black;
-        margin: 30px;
+        .btn {
+            background-color: orange;
+            border: 2px solid black;
+            color: white;
         }
 
-        .post{
-        backgroud-color: yellow;
-        border: 2px solid black;
-        margin: 10px;
+        .lbl {
+            color: orange;
         }
     </style>
 </head>
 <title>New Post</title>
-<div class="post">
+
 <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
-    <br>
-    <label>Title</label>
-    <input type="text" name="title">
-    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <label style="display:block;" class="mt-2 lbl">Title</label>
+                {{form.instance.title | default_if_none:form.title}}
+                <!-- <input type="text" name="title"> -->
+            </div>
+        </div>
 
-    <input type="file" name="picture">
-    <br><br>
+        <div class="row">
+            <div class="col-md-6 lbl mt-5">
+                <img id="img" src="{{media_url}}/{{form.instance.image}}" style="width:100px; height:100px;">
+                <input type="file" id="id_image">
+                <!-- {{form.image}} -->
+            </div>
+        </div>
 
-    <label>Description</label>
-    <textarea name="description" rows="4" cols="50"></textarea>
-    <br><br>
-    <input type="submit" value="Post" class="btn">
+        <div class="row">
+            <div class="col-md-6">
+                <label style="display:block;" class="mt-5 lbl">Description</label>
+                {{form.instance.description | default_if_none:form.description}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mt-5">
+                <input type="submit" value="Post" class="btn">
+            </div>
+        </div>
+    </div>
 </form>
-</div>
 
+{% endblock %}
+
+{% block extra_js%}
+<script>
+    $("#id_image").on('change',function () {
+        $("#img").attr('src', window.URL.createObjectURL(this.files[0])) 
+        })
+</script>
 {% endblock %}

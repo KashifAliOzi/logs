@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from MiniFb import settings
-from .forms import CreateUserForm
+from .forms import CreateUserForm, PostUpdateForm
 from .models import *
 from django.core.mail import send_mail
 from MiniFb.settings import *
@@ -20,8 +20,6 @@ def registerPage(request):
     if request.session.has_key('is_logged'):
         return redirect('socialapp:userposts')
     else:
-        form = CreateUserForm()
-        context = {}
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
@@ -32,6 +30,8 @@ def registerPage(request):
                 # send_mail(subject,
                 #           message, EMAIL_HOST_USER, [recepient], fail_silently=False)
                 return redirect('socialapp:login')
+        form = CreateUserForm()
+        context = {}
         context['form'] = form
         return render(request, 'register.html', context)
 
@@ -74,14 +74,14 @@ def logoutUser(request):
 @login_required
 def newPost(request):
     if request.method == 'POST':
-        title = request.POST.get('title')
-        image = request.FILES.get('picture')
-        description = request.POST.get('description')
-        post = BlogPost(title=title, image=image, description=description, user=request.user)
-        post.save()
+        form = PostUpdateForm(request.POST, request.FILES)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
         return redirect('socialapp:userposts')
-
-    context = {}
+    form = PostUpdateForm()
+    context = {'form': form}
     return render(request, 'new_post.html', context)
 
 
@@ -102,19 +102,24 @@ def postdetail(request, id):
 @login_required
 def updatePost(request, id):
     if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        try:
-            image = request.FILES.get('picture')
-            BlogPost.objects.filter(id=id).update(title=title, image=image, description=description)
-        except:
-            BlogPost.objects.filter(id=id).update(title=title, description=description)
-
+        form = PostUpdateForm(request.POST, request.FILES)
+        if form.is_valid():
+            print('valid')
+            form.save()
+    #     title = request.POST.get('title')
+    #     description = request.POST.get('description')
+    #     try:
+    #         image = request.FILES.get('picture')
+    #         BlogPost.objects.filter(id=id).update(title=title, image=image, description=description)
+    #     except:
+    #         BlogPost.objects.filter(id=id).update(title=title, description=description)
+    #
         return redirect('socialapp:userposts')
 
-    post = BlogPost.objects.filter(id=id)
-    context = {'post': post, 'media_url': settings.MEDIA_URL}
-    return render(request, 'update_post.html', context)
+    inst = BlogPost.objects.get(id=id)
+    form = PostUpdateForm(request.POST, request.FILES, instance=inst)
+    context = {'form': form, 'media_url': settings.MEDIA_URL}
+    return render(request, 'new_post.html', context)
 
 
 @login_required
