@@ -12,7 +12,7 @@ class PostUpdateForm(forms.ModelForm):
     class Meta:
         model = BlogPost
         fields = ['title', 'description', 'image']
-        def __init__(self, *args, **kwargs):
-            id = kwargs.pop('id')
-            super(PostUpdateForm, self).__init__(*args, **kwargs)
-            self.fields['id'].queryset = BlogPost.objects.filter(id=id)
+        # def __init__(self, *args, **kwargs):
+        #     id = kwargs.pop('id')
+        #     super(PostUpdateForm, self).__init__(*args, **kwargs)
+        #     self.fields['id'].queryset = BlogPost.objects.filter(id=id)

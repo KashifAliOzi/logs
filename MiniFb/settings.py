@@ -130,7 +130,9 @@ MEDIA_URL = '/media/'
 LOGIN_URL = '/login/'
 
 #session timeout time
-SESSION_COOKIE_AGE = 30
+SESSION_COOKIE_AGE = 3600
+
+SESSION_TIMEOUT_REDIRECT = 'login'
 
 
 # Variables---- email verification for new user

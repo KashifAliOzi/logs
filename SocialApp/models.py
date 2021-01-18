@@ -10,7 +10,7 @@ class Users(AbstractUser):
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=300)
-    description = models.CharField(max_length=1000)
+    description = models.TextField()
     image = models.ImageField()
     user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):

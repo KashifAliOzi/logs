@@ -54,9 +54,9 @@ def userLogin(request):
             login(request, usr)
             request.session['is_logged'] = True
             if rememberMe==True:
-                request.session.set_expiry(900)
+                request.session.set_expiry(3600*24)
             else:
-                request.session.set_expiry(30)
+                request.session.set_expiry(3600)
             return redirect('socialapp:userposts')
         else:
             messages.info(request, 'Username OR password is incorrect')
@@ -82,7 +82,7 @@ def newPost(request):
         return redirect('socialapp:userposts')
     form = PostUpdateForm()
     context = {'form': form}
-    return render(request, 'new_post.html', context)
+    return render(request, 'new_update_post.html', context)
 
 
 @login_required
@@ -102,24 +102,20 @@ def postdetail(request, id):
 @login_required
 def updatePost(request, id):
     if request.method == 'POST':
-        form = PostUpdateForm(request.POST, request.FILES)
-        if form.is_valid():
-            print('valid')
-            form.save()
-    #     title = request.POST.get('title')
-    #     description = request.POST.get('description')
-    #     try:
-    #         image = request.FILES.get('picture')
-    #         BlogPost.objects.filter(id=id).update(title=title, image=image, description=description)
-    #     except:
-    #         BlogPost.objects.filter(id=id).update(title=title, description=description)
-    #
+        # form = PostUpdateForm(request.POST, request.FILES)
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        try:
+            image = request.FILES.get('image')
+            BlogPost.objects.filter(id=id).update(title=title, image=image, description=description)
+        except:
+            BlogPost.objects.filter(id=id).update(title=title, description=description)
         return redirect('socialapp:userposts')
 
     inst = BlogPost.objects.get(id=id)
-    form = PostUpdateForm(request.POST, request.FILES, instance=inst)
+    form = PostUpdateForm(instance=inst)
     context = {'form': form, 'media_url': settings.MEDIA_URL}
-    return render(request, 'new_post.html', context)
+    return render(request, 'new_update_post.html', context)
 
 
 @login_required

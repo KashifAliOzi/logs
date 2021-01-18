@@ -26,29 +26,20 @@
 <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="container">
+        
+        {% for field in form %}
         <div class="row">
             <div class="col-md-6">
-                <label style="display:block;" class="mt-2 lbl">Title</label>
-                {{form.instance.title | default_if_none:form.title}}
-                <!-- <input type="text" name="title"> -->
+                <label style="display:block;" class="mt-2 lbl">{{field.label}}</label>
+                {{field}}
             </div>
         </div>
-
+        {% endfor %}
         <div class="row">
             <div class="col-md-6 lbl mt-5">
                 <img id="img" src="{{media_url}}/{{form.instance.image}}" style="width:100px; height:100px;">
-                <input type="file" id="id_image">
-                <!-- {{form.image}} -->
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <label style="display:block;" class="mt-5 lbl">Description</label>
-                {{form.instance.description | default_if_none:form.description}}
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-md-6 mt-5">
                 <input type="submit" value="Post" class="btn">
