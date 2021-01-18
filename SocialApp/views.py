@@ -79,7 +79,11 @@ def newPost(request):
             obj = form.save(commit=False)
             obj.user = request.user
             obj.save()
-        return redirect('socialapp:userposts')
+            return redirect('socialapp:userposts')
+        else:
+            context={}
+            context["form"]=form
+            return render(request, 'new_update_post.html', context)
     form = PostUpdateForm()
     context = {'form': form}
     return render(request, 'new_update_post.html', context)
@@ -88,6 +92,7 @@ def newPost(request):
 @login_required
 def userPostsPage(request):
     posts = BlogPost.objects.filter(user=request.user)
+    print("posts count: ", posts.count())
     context = {'posts': posts, 'media_url': settings.MEDIA_URL}
     return render(request, 'user_posts.html', context)
 
@@ -101,19 +106,27 @@ def postdetail(request, id):
 
 @login_required
 def updatePost(request, id):
-    if request.method == 'POST':
-        # form = PostUpdateForm(request.POST, request.FILES)
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        try:
-            image = request.FILES.get('image')
-            BlogPost.objects.filter(id=id).update(title=title, image=image, description=description)
-        except:
-            BlogPost.objects.filter(id=id).update(title=title, description=description)
-        return redirect('socialapp:userposts')
-
     inst = BlogPost.objects.get(id=id)
-    form = PostUpdateForm(instance=inst)
+    form = PostUpdateForm(request.POST or None, instance=inst)
+    if request.method == 'POST':
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user=request.user
+            obj.save()
+            print("this is valid")
+            return redirect('socialapp:userposts')
+        else:
+            print("this is invalid")
+            return redirect('socialapp:newpost')
+        # title = request.POST.get('title')
+        # description = request.POST.get('description')
+        # try:
+        #     image = request.FILES.get('image')
+        #     BlogPost.objects.filter(id=id).update(title=title, image=image, description=description)
+        # except:
+        #     BlogPost.objects.filter(id=id).update(title=title, description=description)
+
+
     context = {'form': form, 'media_url': settings.MEDIA_URL}
     return render(request, 'new_update_post.html', context)
 

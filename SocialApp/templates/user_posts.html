@@ -1,61 +1,66 @@
-{%  extends 'main.html' %}
+{% extends 'main.html' %}
 {% load static %}
 {% block content %}
+
 <head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <style>
-        button{
-            width: 100px;
-            background-color:orange;
-            color:white;
-            float:right;
-            margin:10px;
-            margin-left: -8px;
+        button {
+            width: 80px;
+            background-color: orange;
+            color: white;
+
+        }
+
+        .post-content {
+            border: 2px solid rgb(105, 184, 105);
+            margin: 5px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.493);
         }
     </style>
 </head>
-    <title>Posts</title>
+<title>Posts</title>
 
-    <div id="user-name">
-        <h4>My Posts</h4>
+<div class="container">
+    <div class="row">
+        <strong style="color: whitesmoke;">My Posts</strong>
+        <hr style="color: green;">
+    </div>
+    {%for p in posts %}
+    <div class="post-content">
+        <div class="row">
+            <div class="col-md-4 mt-3">
+                <h4 style="color: orange;">{{p.title}}</h4>
+                <hr style="width:70%;text-align:left;margin-left:0">
+                {{p.description}}
+            </div>
+            <div class="col-md-4 mt-3">
+                <img src="{{media_url}}/{{p.image}}" style="width:200px; height:200px; float:right;">
+            </div>
+            <div class="col-md-4 mt-3">
+                <button type="submit" onclick="location.href = '{% url 'socialapp:postdetail' p.id %}'">View</button>
+                <button type="submit" onclick="location.href = '{% url 'socialapp:updatepost' p.id %}'">Update</button>
+                <button type="submit" onclick="location.href = '{% url 'socialapp:deletepost' p.id %}'">Delete</button>
+                
+            </div>
+        </div>
 
+        <!-- <div class="row">
+            <div class="col-md-1">
+            </div>
+
+            <div class="col-md-1">
+            </div>
+
+            <div class="col-md-1">
+            </div>
+        </div> -->
     </div>
 
-<div class="row">
-	<div class="col-md-7">
-		<hr>
-		<div class="card card-body">
-        {%for p in posts %}
-            <table style="border: 2px solid green; padding: 10px; margin: 20px;">
-                <tr>
-                    <td>
-                        <h4>{{p.title}}</h4>
-                        <br>
-                        <p>
-                            {{p.description}}
-                    </td>
-                    <td>
-                        <div style=" float: right;">
-                        <img src="{{media_url}}/{{p.image}}" style="width:200px; height:200px; float:right;">
-                    </div>
-                    </td>
-                    <td>
-                        <div style="float:right;">
-                        <button type="submit" onclick="location.href = '{% url 'socialapp:postdetail' p.id %}'">View</button><br>
-                        <button type="submit" onclick="location.href = '{% url 'socialapp:updatepost' p.id %}'">Update</button><br>
-                        <button type="submit" onclick="location.href = '{% url 'socialapp:deletepost' p.id %}'">Delete</button><br>
-                        </div>
-                    </td>
-
-                </tr>
-            </table>
-
-        {%endfor%}
-    </div>
-    </div>
+    {%endfor%}
 </div>
-
 {% endblock %}
