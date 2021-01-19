@@ -8,6 +8,9 @@ class CreateUserForm(UserCreationForm):
         model = Users
         fields = ['username', 'email', 'password1', 'password2']
 
+    # def clean_password2(self):
+
+
 class PostUpdateForm(forms.ModelForm):
     class Meta:
         model = BlogPost

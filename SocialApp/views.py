@@ -107,12 +107,10 @@ def postdetail(request, id):
 @login_required
 def updatePost(request, id):
     inst = BlogPost.objects.get(id=id)
-    form = PostUpdateForm(request.POST or None, instance=inst)
     if request.method == 'POST':
+        form = PostUpdateForm(request.POST, request.FILES, instance=inst)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.user=request.user
-            obj.save()
+            form.save()
             print("this is valid")
             return redirect('socialapp:userposts')
         else:
@@ -126,7 +124,7 @@ def updatePost(request, id):
         # except:
         #     BlogPost.objects.filter(id=id).update(title=title, description=description)
 
-
+    form = PostUpdateForm(request.POST or None, instance=inst)
     context = {'form': form, 'media_url': settings.MEDIA_URL}
     return render(request, 'new_update_post.html', context)
 
